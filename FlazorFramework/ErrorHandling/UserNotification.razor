@@ -1,0 +1,20 @@
+@namespace Framework.Flazor
+
+@using Blazored.Toast.Services
+@using Fluxor.Blazor.Web.Components
+
+@inject IToastService toastService
+
+@inherits FluxorComponent
+
+@code {
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        SubscribeToAction<Error>(action => toastService.ShowError(action.Message));
+
+        SubscribeToAction<Success>(action => toastService.ShowSuccess(action.Message));
+    }
+}

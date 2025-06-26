@@ -1,0 +1,92 @@
+@inherits FluxorComponent
+
+@using Microsoft.Extensions.Options
+@using FlazorTemplate.Store.Features.Shared
+@using FlazorTemplate.Configuration
+@using FlazorTemplate.Services.Modals
+
+@inject IState<AppState> appState
+@inject IDispatcher dispatcher
+@inject IJSRuntime jsRuntime
+@inject IOptions<AppSettings> options
+@inject IModalActions actions
+
+<AuthorizeView Policy="@AdminPolicy">
+    <Authorized>
+        <header class="navbar navbar-expand-lg page-header">
+            <div class="menu-container" id="menu-buttons">
+                <div class="buttons-container">
+                    <div>
+                        <button class="navbar-toggler btn btn-secondary" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"><i class="fas fa-bars"></i></span>
+                        </button>
+                    </div>
+                    
+                    <div class="user-container">
+                        <a class="btn btn-secondary" @onclick="@(() => actions.ShowFeedbackDialog(context.User.UserEmail()))"><i class="fa fa-question-circle mr-2"></i>Support</a>
+                                                
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle user" href="#" role="button" id="dropdownMenuUser" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-user"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right user" aria-labelledby="dropdownMenuUser">
+                                <div class="dropdown-item">
+                                    <div class="dropdown-main">
+                                        <div class="dropdown-header">
+                                            <div class="logo"></div>
+                                            <a href="/account/logoutoidc" class="text-link">Sign out</a>
+                                        </div>
+                                        <div class="dropdown-body">
+                                            <div class="dropdown-body-row">
+                                                <div><i class="fas fa-user-circle fa-3x mr-3"></i></div>
+                                                <div>
+                                                    <div>Signed in as @context.User.UserEmail()</div>                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>                                          
+                    </div>
+                </div>
+            </div>
+            <nav class="nav-user-container collapse navbar-collapse mobile-nav " id="navbarNav" role="navigation">
+                <div class="domain-nav">
+                    <ul>
+                        <li>
+                            <NavLink href="/" Match="NavLinkMatch.All">
+                                <div class="nav-icon">
+                                    <span class="fa fa-envelope fa-fw fa-1x mr-2"></span>
+                                </div>
+                                <div class="menu-item-name">
+                                    Home
+                                </div>
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink href="blocklists/blocklist" Match="NavLinkMatch.All">
+                                <div class="nav-icon">
+                                    <span class="fa fa-envelope fa-fw fa-1x mr-2"></span>
+                                </div>
+                                <div class="menu-item-name">
+                                    Block list
+                                </div>
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink href="users/user-dashboard" Match="NavLinkMatch.All">
+                                <div class="nav-icon">
+                                    <span class="fas fa-users fa-1x fa-fw mr-2"></span>
+                                </div>
+                                <div class="menu-item-name">
+                                    User dashboard
+                                </div>
+                            </NavLink>
+                        </li>
+                    </ul>
+                </div>
+             </nav>
+        </header>
+    </Authorized>
+</AuthorizeView>

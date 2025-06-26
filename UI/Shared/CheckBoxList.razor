@@ -1,0 +1,61 @@
+@typeparam TItem
+
+<div class="form-group checklist">
+    <ul>
+        @if (Data != null)
+        {
+            foreach (var item in Data)
+            {
+                var Text = TextField?.Invoke(item);
+                var Value = ValueField?.Invoke(item);
+                bool Checked = false;
+                if (SelectedValues.Contains(Value))
+                {
+                    Checked = true;
+                }
+                <li>
+                    <input type="checkbox" checked=@Checked class="mr-1"
+                           @onchange="eventArgs => { CheckboxClicked(Value, eventArgs.Value); }" />
+                    @Text
+                </li>
+            }
+        }
+    </ul>
+</div>
+
+@code {
+    //Data for the Checkbox
+    [Parameter]
+    public IEnumerable<TItem> Data { get; set; }
+
+    // The field to be shown adjacent to checkbox
+    [Parameter]
+    public Func<TItem, string> TextField { get; set; }
+
+    // The Value which checkbox will return when checked
+    [Parameter]
+    public Func<TItem, string> ValueField { get; set; }
+
+    // The array which contains the list of selected checkboxs
+    [Parameter]
+    public List<string> SelectedValues { get; set; }
+
+    //Method to update the selected value on click on checkbox
+    public void CheckboxClicked(string aSelectedId, object aChecked)
+    {
+        if ((bool)aChecked)
+        {
+            if (!SelectedValues.Contains(aSelectedId))
+            {
+                SelectedValues.Add(aSelectedId);
+            }
+        }
+        else
+        {
+            if (SelectedValues.Contains(aSelectedId))
+            {
+                SelectedValues.Remove(aSelectedId);
+            }
+        }
+    }
+}

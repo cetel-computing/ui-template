@@ -1,0 +1,64 @@
+@typeparam T
+@*
+    A component that places a Loadable into a Bootstrap card, and renders appropriately depending on the
+    state of the Loadable (i.e. Loading, Erorred, Loaded).
+*@
+
+<div class="card @CardClasses">
+    @if (Header != null)
+    {
+        <div class="card-header @CardHeaderClasses">
+            @Header
+        </div>
+    }    
+    <div class="card-body @CardBodyClasses" >
+        @if (Loadable.TryGetLoaded(out var data))
+        {
+            @Body(data)
+        }
+        else if (Loadable.Failed)
+        {
+            <ErrorMessage />
+        }
+        else
+        {
+            <Loading />
+        }
+    </div>
+    @if (Footer != null)
+    {
+        <div class="card-footer @CardFooterClasses" >
+            @Footer
+        </div>
+    }    
+</div>
+
+@code
+{
+    [Parameter]
+    public Loadable<T> Loadable { get; set; }
+
+    [Parameter]
+    public RenderFragment Header { get; set; }
+
+    [Parameter]
+    public RenderFragment<T> Body { get; set; }
+
+    [Parameter]
+    public RenderFragment Footer { get; set; }
+
+    /// <summary>
+    /// Gets or sets additional classes that should be applied to the Card class.
+    /// </summary>
+    [Parameter]
+    public string CardClasses { get; set; } = string.Empty;
+
+    [Parameter]
+    public string CardHeaderClasses { get; set; } = string.Empty;
+
+    [Parameter]
+    public string CardBodyClasses { get; set; } = string.Empty;
+
+    [Parameter]
+    public string CardFooterClasses { get; set; } = string.Empty;
+}

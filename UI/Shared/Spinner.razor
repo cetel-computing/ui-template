@@ -1,0 +1,21 @@
+@*
+    Shows a loading spinner
+    See https://getbootstrap.com/docs/4.2/components/spinners/
+*@
+
+@if (IsInButton)
+{
+    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+    <span class="sr-only">Loading...</span>
+}
+else
+{
+    <div class="spinner-border" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public bool IsInButton { get; set; }
+}

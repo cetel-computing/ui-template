@@ -1,0 +1,61 @@
+@inherits FluxorComponent
+
+@using FlazorTemplate.Store.Features.Shared
+@using FlazorTemplate.Store.Features.Shared.Actions
+
+@inject IState<AppState> appState
+@inject IDispatcher dispatcher
+
+<div class="dashboard-filters">
+    <div class="form-group">
+        @if (appState.Value.Customers.Loaded)
+        {
+            <select id="dashboard-customer" name="dashboard-customer" class="form-control form-control-sm" value="@Selected" @onchange="CustomerChanged">
+                @foreach (var customer in appState.Value.Customers.Data.Where(c => !appState.Value.Customers.Data.Any(r => r.Id == c.ParentId)).OrderBy(c => c.Name))
+                {
+                    if (customer.IsDivisionHead)
+                    {
+                        <optgroup label="@customer.Name">
+                            @foreach (var child in appState.Value.Customers.Data.Where(c => c.ParentId == customer.Id && !c.IsDivisionHead).OrderBy(c => c.Name))
+                            {
+                                <option value="@child.Id">@child.Name</option>
+                            }
+                        </optgroup>
+
+                        @foreach (var child in appState.Value.Customers.Data.Where(c => c.ParentId == customer.Id && c.IsDivisionHead).OrderBy(c => c.Name))
+                        {
+                            var childLabel = customer.Name + " " + child.Name;
+
+                            <optgroup label="@childLabel">
+                                @foreach (var anotherChild in appState.Value.Customers.Data.Where(c => c.ParentId == child.Id).OrderBy(c => c.Name))
+                                {
+                                    <option value="@anotherChild.Id">@anotherChild.Name</option>
+                                }
+                            </optgroup>
+                        }                      
+                    }
+                    else
+                    {
+                        <option value="@customer.Id">@customer.Name</option>
+                    }
+                }
+            </select>
+        }        
+    </div>
+</div> 
+
+@code {
+    [Parameter]
+    public string Selected { get; set; }
+
+    private void CustomerChanged(ChangeEventArgs customer)
+    {
+        if (customer != null)
+        {
+            var customerId = customer.Value.ToString();
+
+            Selected = customerId;
+            dispatcher.Dispatch(new CustomerIdChanged(customerId));
+        }
+    }
+}

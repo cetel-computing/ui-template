@@ -1,0 +1,22 @@
+
+<div tabindex="-1" role="dialog" aria-hidden="true">
+    <p>Are you sure you want to delete this @ObjectType @Name for @Customer?</p>
+    <div class="button-container">
+        <button @onclick="ModalInstance.CloseAsync" class="btn btn-primary">Delete</button>
+        <button @onclick="@(() => ModalInstance.CancelAsync())" class="btn btn-secondary">Cancel</button>
+    </div>
+</div>
+
+@code {
+    [CascadingParameter]
+    BlazoredModalInstance ModalInstance { get; set; } = default!;
+
+    [Parameter]
+    public string ObjectType { get; set; }
+
+    [Parameter]
+    public string Name { get; set; }
+
+    [Parameter]
+    public string Customer { get; set; }
+}

@@ -1,0 +1,44 @@
+@page
+@model FlazorTemplate.Pages.ErrorModel
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Error</title>
+    <link href="bundles/site.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div class="main">
+        <nav class="navbar navbar-expand-lg page-header">
+            <div class="title-container navbar-brand">
+                <div class="logo"></div>
+                <div class="product-title">Flazor Template</div>
+            </div>
+        </nav>
+        <div class="not-found-container">
+            <div class="card">
+                <div class="card-body">
+
+                    <div class="big-figure">Error</div>
+
+                    <div class="jumbo-dark-heading">Sorry, something has gone wrong.</div>
+                    <div class="jumbo-dark-heading">Please contact Corvid if you continue to see this issue.</div>
+
+                    @if (Model.ShowRequestId)
+                    {
+                        <p>@Model.RequestId</p>
+                    }
+                    <div>
+                        <a class="btn btn-primary" href="/">Go to homepage</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

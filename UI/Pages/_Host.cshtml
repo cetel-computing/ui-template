@@ -1,0 +1,74 @@
+@page "/"
+@namespace FlazorTemplate.Pages
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@using Microsoft.AspNetCore.Authentication
+
+@{
+    Layout = null;
+
+    var tokens = new InitialApplicationState
+            {
+                AccessToken = await HttpContext.GetTokenAsync("access_token"),
+                RefreshToken = await HttpContext.GetTokenAsync("refresh_token")
+            };
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flazor Template</title>
+    <base href="~/" />
+    <link href="_content/Blazored.Modal/blazored-modal.css" rel="stylesheet" />
+    <link href="_content/Blazored.Toast/blazored-toast.min.css" rel="stylesheet" />
+    <link href="_content/BlazorDateRangePicker/daterangepicker.min.css" rel="stylesheet" />
+    <link href="_content/Radzen.Blazor/css/material-base.css" rel="stylesheet" />
+    <link href="bundles/site.css" rel="stylesheet" />
+</head>
+<body>
+    <!-- Blazor overlay -->
+    <div id="components-reconnect-modal"></div>
+
+    <component type="typeof(App)" param-InitialState="tokens" render-mode="ServerPrerendered" />
+
+    <div id="blazor-error-ui">
+        <environment include="Staging,Production">
+            An error has occurred. This application may no longer respond until reloaded.
+        </environment>
+        <environment include="Development">
+            An unhandled exception has occurred. See browser dev tools for details.
+        </environment>
+        <a href="" class="reload">Reload</a>
+        <a class="dismiss">🗙</a>
+    </div>
+
+    @*
+        Note that the include order of JS files is important.
+        As per https://docs.microsoft.com/en-us/aspnet/core/blazor/call-javascript-from-dotnet?view=aspnetcore-5.0
+
+        "Add JS files (<script> tags) before the closing </body> tag in the wwwroot/index.html file (Blazor WebAssembly) or Pages/_Host.cshtml
+         file (Blazor Server). Ensure that JS files with JS interop methods are included before Blazor framework JS files."
+    *@    
+    <script src="~/bundles/site.bundle.js"></script>
+
+    <script src="_content/BlazorTable/BlazorTable.min.js"></script>
+    <script src="_content/Blazored.Modal/blazored.modal.js"></script>
+    <script src="_content/BlazorDateRangePicker/clickAndPositionHandler.js"></script>
+    <script src="_content/Radzen.Blazor/Radzen.Blazor.js"></script>
+    <script src="_framework/blazor.server.js" autostart="false"></script>
+    <script>
+        Blazor.start({
+            configureSignalR: function (builder) {
+                let c = builder.build();
+                c.serverTimeoutInMilliseconds = 60000;
+                c.keepAliveIntervalInMilliseconds = 30000;
+                builder.build = () => {
+                    return c;
+                };
+            }
+        });
+    </script>
+</body>
+</html>

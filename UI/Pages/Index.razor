@@ -1,0 +1,41 @@
+@page "/"
+@inherits FluxorComponent
+
+@using BlazorDateRangePicker
+
+@using Microsoft.Extensions.Options
+@using FlazorTemplate.Shared
+@using FlazorTemplate.Services.Navigation
+@using FlazorTemplate.Configuration
+@using FlazorTemplate.Store.Features.Shared
+@using FlazorTemplate.Store.Features.Shared.Actions
+
+@inject IState<AppState> appState
+@inject IOptions<AppSettings> options
+@inject IDispatcher dispatcher
+@inject INavigator navigator
+
+<AuthorizeView Policy="@AdminPolicy">
+    <Authorized>
+        <div class="title-bar split">
+            <div class="page-title">
+                <span class="fa fa-users fa-1x fa-fw mr-2"></span>
+                Home
+            </div>
+            <div class="dashboard-filters">
+                <CustomerSelectList Selected="@(appState.Value.SelectedCustomer?.Id ?? "")" />
+            </div>
+        </div>
+        <div class="block-list-container">
+            <div class="card">
+                <div class="card-header">
+                    Home
+                </div>
+                <div class="card-body">
+
+                </div>
+            </div>
+        </div>
+    </Authorized>
+</AuthorizeView>
+

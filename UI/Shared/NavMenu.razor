@@ -1,0 +1,59 @@
+﻿<!-- SIDE NAV -->
+@using Microsoft.AspNetCore.WebUtilities
+@using Microsoft.Extensions.Options
+@using FlazorTemplate.Configuration
+@using FlazorTemplate.Store.Features.Shared
+
+@inject IState<AppState> appState
+@inject IOptions<AppSettings> options
+@inject NavigationManager navManager
+
+@inherits FluxorLayout
+
+<AuthorizeView Policy="@AdminPolicy">
+    <Authorized>
+        <nav class="flyout-nav">
+            <a href="/" class="no-styles p-0">
+                <div class="product-name-header">
+                    <i class="fas fa-envelope mr-2"></i> Flazor Template
+                </div>
+            </a>
+            <div class="domain-nav">
+                
+                <ul>
+                    <li>
+                        <NavLink href="/" Match="NavLinkMatch.All">
+                            <div class="nav-icon">
+                                <span class="fa fa-envelope fa-fw fa-1x mr-2"></span>
+                            </div>
+                            <div class="menu-item-name">
+                                Home
+                            </div>
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink href="blocklists/blocklist" Match="NavLinkMatch.All">
+                            <div class="nav-icon">
+                                <span class="fa fa-envelope fa-fw fa-1x mr-2"></span>
+                            </div>
+                            <div class="menu-item-name">
+                                Block list
+                            </div>
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink href="users/user-dashboard" Match="NavLinkMatch.All">
+                            <div class="nav-icon">
+                                <span class="fas fa-users fa-1x fa-fw mr-2"></span>
+                            </div>
+                            <div class="menu-item-name">
+                                User dashboard
+                            </div>
+                        </NavLink>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </Authorized>
+</AuthorizeView>
+

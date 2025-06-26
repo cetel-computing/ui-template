@@ -1,0 +1,84 @@
+﻿@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.WebUtilities
+@using FlazorTemplate.Providers
+
+@inject TokenProvider TokenProvider
+@inject NavigationManager MyNavigationManager
+
+<Fluxor.Blazor.Web.StoreInitializer />
+
+<CascadingAuthenticationState>
+    <CascadingBlazoredModal>
+        <Router AppAssembly="@typeof(Program).Assembly" PreferExactMatches="@true">
+            <Found Context="routeData">
+                <AuthorizeRouteView RouteData="@routeData"
+                                    DefaultLayout="@typeof(MainLayout)">
+                    <NotAuthorized>
+                        <div class="not-authorized">
+                            @if (context.User.Identity?.IsAuthenticated ?? false)
+                            {
+                                <h1>Unauthorised</h1>
+                                <p>Sorry, you're not authorised to reach this page.</p>
+                                <p>You may need to log in as a different user.</p>
+                            }
+                            else
+                            {
+                                <h1>Unauthenticated</h1>
+                                <p>You are not authenticated.</p>
+                            }
+                        </div>
+                    </NotAuthorized>
+                    <Authorizing>
+                        <p>Authorisation in progress</p>
+                    </Authorizing>
+                </AuthorizeRouteView>
+            </Found>
+            <NotFound>
+                <LayoutView Layout="@typeof(MainLayout)">
+                    <div class="not-found-container">
+                        <div class="card">
+                            <div class="card-body">
+
+                                <div class="big-figure">404.</div>
+                                <div class="jumbo-dark-heading">Page not found</div>
+                                <p>Sorry, there's nothing at this address.</p>
+                                <div>
+                                    <a class="btn btn-primary" href="/">Go to homepage</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </LayoutView>
+            </NotFound>
+        </Router>
+    </CascadingBlazoredModal>
+</CascadingAuthenticationState>
+
+@code {
+    [Parameter]
+    public InitialApplicationState? InitialState { get; set; }
+
+    protected override Task OnInitializedAsync()
+    {
+        TokenProvider.AccessToken = InitialState?.AccessToken;
+        TokenProvider.RefreshToken = InitialState?.RefreshToken;
+
+        var uri = MyNavigationManager.ToAbsoluteUri(MyNavigationManager.Uri);
+        if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("customer", out var custId))
+        {
+            TokenProvider.InitialCustomer = custId;
+        }
+
+        if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("customerFilter", out var custFilter))
+        {
+            TokenProvider.CustomerFilter = custFilter;
+        }
+
+        if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("portal", out var portal))
+        {
+            TokenProvider.Portal = true;
+        }
+
+        return base.OnInitializedAsync();
+    }
+}

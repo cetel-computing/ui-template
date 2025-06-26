@@ -1,0 +1,58 @@
+<div tabindex="-1" role="dialog" aria-hidden="true" class="form-modal">
+    <p>For help and advice on this service, please contact your IT support team.</p>
+    <p>We value your opinion, and your feedback is important to us. If you have any comments or questions, or would like to request a new feature, please get in touch via the form below or call <a  class="text-link" href="tel:+441242651251">01242 651251</a>.</p>
+    <EditForm Model="form" OnValidSubmit="Submit">
+        <DataAnnotationsValidator />
+        <div class="form-group">
+
+            <div class="form-group">
+                <label for="feedback-type">Enquiry type</label>
+                <select id="feedback-type" name="feedback-type" class="form-control form-control-sm" @onchange="SelectFeedbackType">
+                    <option value="" selected hidden>Please select</option>
+                    <option value="corvid-services">Corvid Services</option>
+                    <option value="feature-request">Feature request</option>
+                    <option value="Other">Other</option>
+                </select>
+                <ValidationMessage For="@(() => form.FeedbackType)" />
+            </div>
+
+            <label for="feedbackTextBox">Enter your comments:</label>
+            <InputTextArea @bind-Value="form.Feedback" class="form-control" id="feedbackTextBox" rows="5" style="display:block;" />
+            <ValidationMessage For="@(() => form.Feedback)" />
+
+            <div class="button-container">
+                <button type="submit" class="btn btn-primary">Send</button>
+                <button @onclick="@(() => ModalInstance.CancelAsync())" class="btn btn-secondary">Cancel</button>
+                
+            </div>
+        </div>
+    </EditForm>
+</div>
+
+@code {
+    [CascadingParameter]
+    BlazoredModalInstance ModalInstance { get; set; } = default!;
+
+    private Form form = new Form();
+
+    private void Submit()
+    {
+        ModalInstance.CloseAsync(ModalResult.Ok(form.FeedbackType + " - User comments: " + form.Feedback));
+    }
+
+    private void SelectFeedbackType(ChangeEventArgs feedbackType)
+    {
+        form.FeedbackType = feedbackType.Value.ToString();
+    }
+
+    private class Form
+    {
+        [Required(ErrorMessage = "Please enter your enquiry")]
+        [MinLength(1, ErrorMessage = "Please enter your enquiry")]
+        public string Feedback { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Please select a type of enquiry")]
+        public string? FeedbackType { get; set; } = null;
+    }
+}
+

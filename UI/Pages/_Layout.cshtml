@@ -1,0 +1,26 @@
+@*
+    This page should be kept in-sync with _Host.cshtml
+*@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flazor Template</title>
+    <base href="~/" />
+    <link href="bundles/site.css" rel="stylesheet" />
+</head>
+<body>
+    @RenderBody()
+
+    @*
+        Note that the include order of JS files is important.
+        As per https://docs.microsoft.com/en-us/aspnet/core/blazor/call-javascript-from-dotnet?view=aspnetcore-5.0
+
+        "Add JS files (<script> tags) before the closing </body> tag in the wwwroot/index.html file (Blazor WebAssembly) or Pages/_Host.cshtml
+         file (Blazor Server). Ensure that JS files with JS interop methods are included before Blazor framework JS files."
+    *@
+    <script src="~/bundles/site.bundle.js"></script>
+</body>
+</html>

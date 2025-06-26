@@ -1,0 +1,17 @@
+@page
+@model FlazorTemplate.Pages.Account.LogoutOidc
+@{
+    ViewData["Title"] = "Log out";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="helperbox col bg-corvid text-white p-4">
+            <h2>Logged out</h2>
+            <h4>You have successfully logged out of the application.</h4>
+            <div class="py-3">
+                <a title="Log in here" class=" mb-2" asp-page="./Login">Log in again here</a>
+            </div>
+        </div>
+    </div>
+</div>
